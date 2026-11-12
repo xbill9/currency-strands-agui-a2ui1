@@ -1,0 +1,19 @@
+The A2UI 1.0 currency agent, moved to AWS end to end: Strands Agents with Amazon Nova 2 Lite on Bedrock, the agent on AgentCore Runtime over AG-UI, and the Next.js UI on ECS Express Mode.
+The model writes one macro call and the server builds the card or chart. Ten prompts, ten runs each: 100 of 100 rendered clean locally and 100 of 100 through the deployed app.
+
+Builder Center Article is here:
+https://builder.aws.com/content/3M0d3aKyhlumMXY87jDNbWRU5EV/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode
+
+Medium is here:
+https://xbill999.medium.com/a2ui-1-0-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-bc60726f27e6
+
+Substack is here:
+https://xbill9.substack.com/p/a2ui-10-on-aws-a-strands-currency
+
+Dev.to is here:
+https://dev.to/aws-builders/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-2pgl
+
+Linked In is here:
+https://www.linkedin.com/feed/update/urn:li:activity:7526654309812318208/
+
+#AWS #Bedrock #AgentCore #Strands #A2UI

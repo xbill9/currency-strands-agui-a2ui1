@@ -6,3 +6,4 @@ builder    = https://builder.aws.com/content/3M0d3aKyhlumMXY87jDNbWRU5EV/a2ui-10
 substack   = https://xbill9.substack.com/p/a2ui-10-on-aws-a-strands-currency
 devto-aws  = https://dev.to/aws-builders/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-2pgl
 repo       = https://github.com/xbill9/currency-strands-agui-a2ui1
+linkedin   = https://www.linkedin.com/feed/update/urn:li:activity:7526654309812318208/
