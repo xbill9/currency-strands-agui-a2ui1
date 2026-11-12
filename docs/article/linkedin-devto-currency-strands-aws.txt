@@ -1,0 +1,16 @@
+A2UI 1.0 on AWS: Strands, Amazon Nova, AgentCore and ECS Express Mode
+
+A currency agent that answers with generated UI, run entirely on AWS: Strands Agents and Amazon Nova 2 Lite on Bedrock, the agent on AgentCore Runtime over AG-UI, the Next.js UI on ECS Express Mode, and A2UI 1.0 with server-side macros.
+
+What is in it:
+
+- 🟢 Ten prompts, ten runs each, on us.amazon.nova-2-lite-v1:0: 100 of 100 replies rendered clean locally and 100 of 100 through the deployed app
+- 🟢 The A2UI SDK, catalogs, macros and React renderer carried over from the ADK build unchanged
+- 🟢 A2UI written as reply text rendered as a card in 10 of 10 runs locally and 10 of 10 on AWS
+- 🟢 The agent ran on AgentCore Runtime with protocol AGUI from one agentcore deploy
+
+dev.to (AWS Community Builders): https://dev.to/aws-builders/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-2pgl
+AWS Builder Center: https://builder.aws.com/content/3M0d3aKyhlumMXY87jDNbWRU5EV/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode
+Medium: https://xbill999.medium.com/a2ui-1-0-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-bc60726f27e6
+Substack: https://xbill9.substack.com/p/a2ui-10-on-aws-a-strands-currency
+GitHub: https://github.com/xbill9/currency-strands-agui-a2ui1
