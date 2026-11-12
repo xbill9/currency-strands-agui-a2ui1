@@ -4,5 +4,5 @@ devto-gde  = SKIP
 medium     = PENDING
 builder    = PENDING
 substack   = SKIP
-devto-aws  = PENDING
+devto-aws  = https://dev.to/aws-builders/a2ui-10-on-aws-a-strands-currency-agent-with-amazon-nova-agentcore-runtime-and-ecs-express-mode-2pgl
 repo       = https://github.com/xbill9/currency-strands-agui-a2ui1

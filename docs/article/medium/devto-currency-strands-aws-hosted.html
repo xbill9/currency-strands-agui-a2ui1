@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A2UI 1.0 on AWS: a Strands Currency Agent with Amazon Nova, AgentCore Runtime and ECS Express Mode</title>
+  <meta name="description" content="A currency agent that answers with generated UI, run entirely on AWS: Strands Agents and Amazon Nova 2 Lite on Bedrock, the agent on AgentCore Runtime over AG-UI, the Next.js UI on ECS Express Mode, and A2UI 1.0 with server-side macros." />
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <style>
+    body{font-family:-apple-system,'Segoe UI',Roboto,'Liberation Sans',Arial,sans-serif;
+         font-size:18px;line-height:1.58;max-width:42em;color:#242424;}
+    h1,h2,h3,h4{font-weight:700;line-height:1.25;margin-top:1.8em;}
+    h4{font-size:1.25em;}
+    img{max-width:100%;height:auto;display:block;margin:1.6em 0;}
+    pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:4px;
+        padding:12px 14px;overflow-x:auto;font-size:14px;line-height:1.45;}
+    code{font-family:'Liberation Mono',Menlo,Consolas,monospace;}
+    :not(pre)>code{background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:.9em;}
+    blockquote{border-left:3px solid #ddd;margin-left:0;padding-left:1em;color:#555;}
+    hr{border:0;border-top:1px solid #e6e6e6;margin:2.4em 0;}
+  </style>
+</head>
+<body>
+<p>This article provides a step by step guide to a currency agent that
+answers with generated UI, run entirely on AWS. A Strands agent on
+Amazon Nova 2 Lite looks up exchange rates, describes its answer as A2UI
+1.0 components, and a Next.js CopilotKit front end renders the cards and
+charts over AG-UI. The agent runs on Amazon Bedrock AgentCore Runtime
+and the UI runs on Amazon ECS Express Mode. It is the AWS sibling of a
+Google ADK and Gemini build of the same app.</p>
+<figure><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-cover.a5c52874.jpg" alt="A2UI 1.0 on AWS: a Strands Currency Agent with Amazon Nova, AgentCore Runtime and ECS Express Mode" /></figure>
+<p><a
+href="https://github.com/xbill9/currency-strands-agui-a2ui1">https://github.com/xbill9/currency-strands-agui-a2ui1</a></p>
+<p><strong>The A2UI 1.0 pipeline carries over to Strands and Amazon Nova
+unchanged, and the deployed app renders every reply clean.</strong> The
+model writes one line, such as
+<code>root = RateCard("USD", "EUR", 250)</code>, and server-side macros
+fetch the rates and build the components. Ten prompts, run ten times
+each, rendered cleanly in 100 of 100 replies with the agent and UI on a
+laptop, and in 100 of 100 replies through the deployed app: ECS Express
+Mode to AgentCore Runtime to
+<code>us.amazon.nova-2-lite-v1:0</code>.</p>
+<hr />
+<h4 id="what-is-being-built">What Is Being Built?</h4>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/architecture.png"
+alt="Architecture: the browser talks AG-UI to the Next.js UI on ECS Express Mode, which signs each run with SigV4 and invokes the Strands agent on AgentCore Runtime; the agent calls Amazon Nova 2 Lite on Bedrock, an MCP server over stdio, and the Frankfurter API through three macros" /></p>
+<p><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-currency-strands-aws-table-1.png"
+alt="Table: Piece, Where it runs, Code" /></p>
+<p>The browser never holds AWS credentials. CopilotKit's runtime posts
+each AG-UI run to <code>/api/agentcore</code> on the Next.js server,
+which signs it with the ECS task role and streams the agent's AG-UI
+events back.</p>
+<p>Versions, read from the machine on 2026-11-11:</p>
+<p><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-currency-strands-aws-table-2.png"
+alt="Table: Component, Version" /></p>
+<hr />
+<h4 id="at-this-point-you-should-have">At This Point You Should
+Have…</h4>
+<ul>
+<li>Python 3.13 or newer and Node.js with npm</li>
+<li>An AWS account with Amazon Bedrock access to Amazon Nova 2 Lite, and
+credentials from <code>aws login</code></li>
+<li>Docker and the AgentCore CLI
+(<code>npm install -g @aws/agentcore</code>) for the deploy</li>
+<li>The repository cloned:</li>
+</ul>
+<pre class="shell"><code>git clone https://github.com/xbill9/currency-strands-agui-a2ui1.git
+cd currency-strands-agui-a2ui1</code></pre>
+<hr />
+<h4 id="step-1--run-it-locally">Step 1 — Run It Locally</h4>
+<pre class="shell"><code>pip install -e app/agent
+cd app/agent &amp;&amp; PORT=8090 python3 main.py</code></pre>
+<p>In a second terminal:</p>
+<pre class="shell"><code>cd frontend-react &amp;&amp; npm install --ignore-scripts --legacy-peer-deps
+PORT=3001 AGENT_URL=http://127.0.0.1:8090/invocations npx next dev --webpack -p 3001
+curl -s http://127.0.0.1:8090/ping
+{&quot;status&quot;:&quot;healthy&quot;}</code></pre>
+<p>The UI is at http://localhost:3001. The same <code>main.py</code>
+runs locally and on AgentCore Runtime: <code>/invocations</code> and
+<code>/ping</code> on port 8080 is the AgentCore contract, and
+<code>PORT</code> moves it for local work.</p>
+<hr />
+<h4 id="step-2--the-a2ui-tool-on-strands">Step 2 — The A2UI Tool on
+Strands</h4>
+<p>The model writes A2UI Express and passes it to one tool. The tool
+compiles the block, validates it against the catalogs the model sees,
+expands the macros, and validates the result against the catalogs the
+browser renders:</p>
+<pre class="python"><code>@tool(name=TOOL_NAME, context=True)
+def send_a2ui_json_to_client(a2ui_payload: str, tool_context: ToolContext) -&gt; str:
+    try:
+        wire = compile_a2ui(a2ui_payload)
+    except Exception as e:  # noqa: BLE001
+        return json.dumps({ERROR_KEY: f&quot;Failed to call A2UI tool {TOOL_NAME}: {e}&quot;})
+    tool_context.agent.cancel(after_current_tools=True)
+    return json.dumps({VALIDATED_KEY: wire})
+def compile_a2ui(payload: str) -&gt; list[dict]:
+    ...
+    validate_payload(a2ui_processor.active_catalogs, messages)
+    typed = [_message_adapter.validate_python(m) for m in messages]
+    expanded = macro_expander.transform_to_transport(typed)
+    wire = [m.model_dump(by_alias=True, exclude_none=True) for m in expanded]
+    validate_payload(BASE_CATALOGS, wire)
+    return wire</code></pre>
+<p><code>ag-ui-strands</code> streams the tool result to the browser as
+an AG-UI <code>TOOL_CALL_RESULT</code>, and the React app renders
+<code>validated_a2ui_json</code> with <code>@a2ui/react</code>.</p>
+<p>The system prompt comes from the same A2UI SDK the ADK build uses:
+the role, then <code>generate_base_rules()</code>,
+<code>generate_catalog_instructions(include_schema=True)</code> and
+<code>generate_examples()</code> from the Express format's prompt
+generator.</p>
+<hr />
+<h4 id="step-3--the-ui-is-the-answer">Step 3 — The UI Is the Answer</h4>
+<p><code>tool_context.agent.cancel(after_current_tools=True)</code> ends
+the turn after a successful send, so the card is the whole reply and no
+second model call follows. It runs only on success. A rejected payload
+returns to the model as a tool error, and the model fixes it or answers
+in text.</p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/invalid-code.png"
+alt="The agent&#39;s reply to &quot;Convert 100 USD to XYZ&quot;: a plain-text answer that XYZ is not a recognised currency code, after the RateCard macro failed on the Frankfurter lookup" /></p>
+<hr />
+<h4 id="step-4--server-side-macros-the-model-writes-one-line">Step 4 —
+Server-Side Macros: The Model Writes One Line</h4>
+<p>Three macros, shared with the ADK build, turn one call into a full
+card. Each fetches its figures from the Frankfurter API on the server,
+so no rate passes through the model:</p>
+<p><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-currency-strands-aws-table-3.png"
+alt="Table: Macro, The model writes, The server builds" /></p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/rate-card.png"
+alt="Rate card for &quot;How much is 250 USD in EUR?&quot;: 250.00 USD = 224.68 EUR, 1 USD = 0.89871 EUR, ECB reference rate for 2026-11-11" /></p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/line-chart.png"
+alt="Line chart of USD to JPY over the last 90 days, 2026-08-14 to 2026-11-11, with low 153.27, high 160.16 and latest 159.23" /></p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/comparison.png"
+alt="Comparison card for 1 USD against EUR, GBP, JPY and CAD with a bar chart of the percent change from 2026-10-13 to 2026-11-11, bars above and below a zero line" /></p>
+<p>Macro arguments are untrusted input: <code>macros.py</code> validates
+every currency code and clamps the day count before any request leaves
+the server.</p>
+<hr />
+<h4 id="step-5--a2ui-written-as-reply-text-still-renders">Step 5 — A2UI
+Written as Reply Text Still Renders</h4>
+<p><code>RescuingBedrockModel</code> wraps the Bedrock ConverseStream.
+Text from <code>&lt;a2ui</code> onward is held out of the chat, and at
+the end of the message each block becomes a <code>toolUse</code> for the
+UI tool with stop reason <code>tool_use</code>, so Strands runs the tool
+as if the model had called it:</p>
+<pre class="python"><code>class RescuingBedrockModel(BedrockModel):
+    async def stream(self, *args, **kwargs):
+        async for event in rescue_stream(super().stream(*args, **kwargs)):
+            yield event</code></pre>
+<p>The render suite asks for this on purpose: "Write the A2UI block for
+a USD to EUR rate card directly in your reply text. Do not call any
+tool." It rendered as a card in 10 of 10 runs locally and 10 of 10 on
+AWS.</p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/img/rescued.png"
+alt="The reply to a request for A2UI as reply text: a rendered rate card, 1 USD = 0.89871 EUR, with no raw a2ui block in the chat" /></p>
+<hr />
+<h4 id="step-6--the-agent-on-agentcore-runtime">Step 6 — The Agent on
+AgentCore Runtime</h4>
+<p><code>main.py</code> mounts the Strands agent as an AG-UI endpoint
+with <code>ag-ui-strands</code>:</p>
+<pre class="python"><code>agui_agent = StrandsAgent(agent=agent, name=&quot;currency_agent&quot;,
+                          description=&quot;An agent that can help with currency conversions&quot;)
+app = FastAPI(title=&quot;Strands currency agent&quot;, telemetry={&quot;auto_configure&quot;: False})
+add_strands_fastapi_endpoint(app, agui_agent, &quot;/invocations&quot;)
+add_ping(app, &quot;/ping&quot;)</code></pre>
+<p>The AgentCore project declares the protocol, the runtime and the
+model:</p>
+<pre class="json"><code>{
+  &quot;name&quot;: &quot;currency_agent&quot;,
+  &quot;build&quot;: &quot;CodeZip&quot;,
+  &quot;entrypoint&quot;: &quot;main.py&quot;,
+  &quot;codeLocation&quot;: &quot;app/agent&quot;,
+  &quot;runtimeVersion&quot;: &quot;PYTHON_3_14&quot;,
+  &quot;protocol&quot;: &quot;AGUI&quot;,
+  &quot;envVars&quot;: [{ &quot;name&quot;: &quot;BEDROCK_MODEL_ID&quot;, &quot;value&quot;: &quot;us.amazon.nova-2-lite-v1:0&quot; }]
+}
+./infra/configure_aws_target.sh
+agentcore deploy</code></pre>
+<p><code>agentcore deploy</code> packages <code>app/agent</code> with
+the dependencies in its <code>pyproject.toml</code> and deploys a
+CloudFormation stack holding the runtime and its IAM role. The MCP
+server ships in the same zip and runs as a stdio child of the agent.</p>
+<hr />
+<h4 id="mag_right-tip-pin-mcp-for-fastmcp-4">🔎 Tip: Pin MCP for FastMCP
+4</h4>
+<p><code>bedrock-agentcore[strands-agents]</code> caps <code>mcp</code>
+below 2.0, and FastMCP 4 needs <code>mcp</code> 2.3. The agent's
+<code>pyproject.toml</code> lists <code>strands-agents</code>,
+<code>ag-ui-strands</code>, <code>fastmcp&gt;=4.1.8</code> and
+<code>mcp&gt;=2.3,&lt;2.4</code> directly, and the AG-UI app needs
+nothing from the <code>bedrock-agentcore</code> package.</p>
+<hr />
+<h4 id="step-7--the-ui-on-ecs-express-mode">Step 7 — The UI on ECS
+Express Mode</h4>
+<p>AgentCore's invoke endpoint takes SigV4-signed requests, so the
+Next.js server signs each run with the ECS task role:</p>
+<pre class="typescript"><code>const signed = await new SignatureV4({
+  service: &quot;bedrock-agentcore&quot;, region, credentials: defaultProvider(), sha256: Sha256,
+}).sign(new HttpRequest({
+  method: &quot;POST&quot;, protocol: &quot;https:&quot;, hostname: host, path,
+  query: { qualifier: &quot;DEFAULT&quot; },
+  headers: { host, &quot;content-type&quot;: &quot;application/json&quot;, accept: &quot;text/event-stream&quot;,
+             &quot;x-amzn-bedrock-agentcore-runtime-session-id&quot;: sessionId(threadId) },
+  body,
+}));</code></pre>
+<p>The session id is the CopilotKit thread id, padded to the 33
+characters AgentCore requires, so each conversation keeps its own
+runtime session. A 5xx from the runtime is retried before any byte
+reaches the browser.</p>
+<pre class="shell"><code>./infra/deploy_ui.sh</code></pre>
+<p>The script builds the image, pushes it to Amazon ECR, creates a task
+role allowed only <code>bedrock-agentcore:InvokeAgentRuntime</code> on
+this one runtime, and creates or updates the service with
+<code>aws ecs create-express-gateway-service</code>. ECS Express Mode
+provisions the load balancer, the HTTPS endpoint and the scaling, and
+the script prints the URL.</p>
+<p><img
+src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/img/aws-comparison.jpg"
+alt="The deployed app on ECS Express Mode: a comparison card for 1 USD against EUR, GBP, JPY and CAD with a bar chart of the change" /></p>
+<hr />
+<h4 id="step-8--every-prompt-ten-runs-local-and-on-aws">Step 8 — Every
+Prompt, Ten Runs, Local and on AWS</h4>
+<p><code>tools/render_suite.py</code> sends each prompt through the UI's
+CopilotKit endpoint. A UI prompt passes when A2UI rendered and no raw
+<code>&lt;a2ui</code> text reached the chat; the off-topic prompt passes
+on a text refusal.</p>
+<pre class="shell"><code>UI_URL=https://&lt;your-endpoint&gt;.ecs.us-east-1.on.aws \
+  python3 tools/render_suite.py 10 nova-2-lite-on-agentcore evidence/render-suite-aws.jsonl
+# nova-2-lite-on-agentcore: 100 of 100 replies rendered clean (10 runs per prompt)
+10 of 10: pass | Compare 1 USD in EUR, GBP, JPY and CAD
+10 of 10: pass | Compare the euro, pound and Swiss franc against the dollar in a bar chart
+10 of 10: pass | Convert 100 USD to XYZ
+10 of 10: pass | How much is 250 USD in EUR?
+10 of 10: pass | Show a bar chart of 1 USD in EUR, GBP, JPY, CHF and CAD
+10 of 10: pass | Show me EUR to USD for the past 6 months and the current rate
+10 of 10: pass | Show me the USD to JPY trend over the last 90 days
+10 of 10: pass | What&#39;s a thousand euros in dollars?
+10 of 10: pass | What&#39;s the weather in Paris?
+10 of 10: pass | Write the A2UI block for a USD to EUR rate card directly in your reply text. Do not call any tool.</code></pre>
+<p><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-currency-strands-aws-table-4.png"
+alt="Table: Where, Model, Clean renders" /></p>
+<hr />
+<h4 id="step-9--tear-it-down">Step 9 — Tear It Down</h4>
+<p>The ECS service bills by the hour while it runs. These remove
+everything the two deploy steps created:</p>
+<pre class="shell"><code>aws ecs delete-express-gateway-service \
+  --service-arn arn:aws:ecs:$REGION:$ACCOUNT:service/default/currency-strands-ui
+aws cloudformation delete-stack --stack-name AgentCore-currencystrands-default
+aws ecr delete-repository --repository-name currency-strands-ui --force
+aws iam delete-role-policy --role-name currency-strands-ui-task --policy-name invoke-agentcore-runtime
+aws iam delete-role --role-name currency-strands-ui-task</code></pre>
+<hr />
+<h4 id="compare-and-contrast">Compare and Contrast</h4>
+<p><img src="https://raw.githubusercontent.com/xbill9/currency-strands-agui-a2ui1/main/docs/article/medium/img/devto-currency-strands-aws-table-5.png"
+alt="Table: ADK build, This build" /></p>
+<hr />
+<h4 id="so-which-one">So, Which One?</h4>
+<p>Pick by where the rest of the system lives. The A2UI half is
+portable: the same SDK, catalogs, macros and React renderer run under
+both frameworks, and only two framework hooks change, the call that ends
+the turn and the place where reply-text A2UI is caught.</p>
+<p>On AWS, AgentCore Runtime takes an AG-UI app as is, and ECS Express
+Mode gives the UI an HTTPS endpoint from one command. The one piece of
+glue is the SigV4 proxy in the UI server, which also keeps credentials
+out of the browser.</p>
+<hr />
+<h4 id="summary">Summary</h4>
+<p>The goal of this article was to run the A2UI 1.0 currency agent
+entirely on AWS, with Strands Agents and an Amazon model. The key to the
+solution was keeping the A2UI pipeline whole, with the model writing one
+macro call and the server building and validating the components, and
+adapting only the framework hooks and the hosting. The results were:</p>
+<ul>
+<li>🟢 Ten prompts, ten runs each, on
+<code>us.amazon.nova-2-lite-v1:0</code>: 100 of 100 replies rendered
+clean locally and 100 of 100 through the deployed app</li>
+<li>🟢 The A2UI SDK, catalogs, macros and React renderer carried over
+from the ADK build unchanged</li>
+<li>🟢 A2UI written as reply text rendered as a card in 10 of 10 runs
+locally and 10 of 10 on AWS</li>
+<li>🟢 The agent ran on AgentCore Runtime with protocol AGUI from one
+<code>agentcore deploy</code></li>
+<li>🟢 The UI ran on ECS Express Mode with a task role scoped to one
+runtime, and the browser never saw AWS credentials</li>
+<li>⚠️ <code>bedrock-agentcore[strands-agents]</code> caps
+<code>mcp</code> below 2.0; FastMCP 4 needs <code>mcp</code> 2.3</li>
+<li>⚠️ AgentCore needs a session id of 33 characters or more</li>
+</ul>
+<p>Scope: one AWS account in us-east-1,
+<code>us.amazon.nova-2-lite-v1:0</code> at temperature 0.2, ECB
+reference rates from the Frankfurter API, measured on 2026-11-11 with
+ten runs per prompt, locally and through the deployed app.</p>
+<p>The strategy for running a generative UI agent on AWS with Strands,
+Amazon Nova, AgentCore Runtime and ECS Express Mode was validated with
+an incremental step by step approach.</p>
+<hr />
+<h4 id="references">References</h4>
+<ul>
+<li>The repository: <a
+href="https://github.com/xbill9/currency-strands-agui-a2ui1">https://github.com/xbill9/currency-strands-agui-a2ui1</a></li>
+<li>Evidence for every figure here: <a
+href="https://github.com/xbill9/currency-strands-agui-a2ui1/tree/main/evidence">https://github.com/xbill9/currency-strands-agui-a2ui1/tree/main/evidence</a></li>
+<li>The ADK and Gemini sibling: <a
+href="https://github.com/xbill9/currency-claude-agui-a2ui1">https://github.com/xbill9/currency-claude-agui-a2ui1</a></li>
+<li>Strands Agents: <a
+href="https://strandsagents.com">https://strandsagents.com</a></li>
+<li>Amazon Bedrock AgentCore: <a
+href="https://aws.amazon.com/bedrock/agentcore/">https://aws.amazon.com/bedrock/agentcore/</a></li>
+<li>Amazon ECS Express Mode: <a
+href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/express-service-overview.html">https://docs.aws.amazon.com/AmazonECS/latest/developerguide/express-service-overview.html</a></li>
+<li>A2UI v1.0 specification: <a
+href="https://a2ui.org/specification/v1.0-a2ui/">https://a2ui.org/specification/v1.0-a2ui/</a></li>
+<li>AG-UI: <a
+href="https://docs.ag-ui.com">https://docs.ag-ui.com</a></li>
+<li>CopilotKit: <a
+href="https://github.com/CopilotKit/CopilotKit">https://github.com/CopilotKit/CopilotKit</a></li>
+<li>Model Context Protocol: <a
+href="https://modelcontextprotocol.io">https://modelcontextprotocol.io</a></li>
+<li>Frankfurter API: <a
+href="https://www.frankfurter.dev">https://www.frankfurter.dev</a></li>
+<li>The upstream Currency Agent (A2A + ADK + MCP): <a
+href="https://github.com/jackwotherspoon/currency-agent">https://github.com/jackwotherspoon/currency-agent</a></li>
+</ul>
+</body>
+</html>
