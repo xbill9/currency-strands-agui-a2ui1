@@ -1,0 +1,39 @@
+{
+  "name": "currency-strands-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "dev:ui": "next dev --webpack",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@a2ui/markdown-it": "^0.2.2",
+    "@a2ui/react": "^0.15.0",
+    "@a2ui/web_core": "^0.15.0",
+    "@ag-ui/client": "0.0.52",
+    "@aws-crypto/sha256-js": "^5.2.0",
+    "@aws-sdk/credential-provider-node": "^3.972.97",
+    "@copilotkit/react-core": "1.56.4",
+    "@copilotkit/runtime": "1.56.4",
+    "@hono/node-server": "^1",
+    "@smithy/protocol-http": "^5.6.2",
+    "@smithy/signature-v4": "^5.7.5",
+    "hono": "^4",
+    "next": "16.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "shiki": "^3.19.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,7 @@
+[lint.per-file-ignores]
+# Test scripts catch everything on purpose: they report any failure as a failed
+# check instead of crashing.
+"frontend-react/scripts/*" = ["BLE001", "S110"]
+
+[lint.isort]
+combine-as-imports = true

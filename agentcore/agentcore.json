@@ -1,0 +1,20 @@
+{
+  "name": "currencystrands",
+  "version": 2,
+  "managedBy": "CDK",
+  "runtimes": [
+    {
+      "name": "currency_agent",
+      "build": "CodeZip",
+      "modelProvider": "Bedrock",
+      "entrypoint": "main.py",
+      "codeLocation": "app/agent",
+      "runtimeVersion": "PYTHON_3_14",
+      "protocol": "AGUI",
+      "envVars": [
+        { "name": "BEDROCK_MODEL_ID", "value": "us.amazon.nova-2-lite-v1:0" }
+      ]
+    }
+  ],
+  "memories": []
+}

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling ~= 1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "currency-agent"
+version = "0.1.0"
+description = "Strands currency agent on Amazon Bedrock, answering in A2UI 1.0 over AG-UI"
+requires-python = ">=3.12"
+dependencies = [
+    "a2ui-agent-sdk == 0.11.0",
+    "a2ui-core == 0.6.0",
+    "ag-ui-strands >= 0.3.0, < 0.4.0",
+    "ag-ui-protocol >= 0.1.19, < 0.2.0",
+    "aws-opentelemetry-distro ~= 0.21.0",
+    "botocore[crt] ~= 1.43.0",
+    "fastapi >= 0.142.0, < 1.0.0",
+    "fastmcp >= 4.1.8, < 5.0.0",
+    "httpx >= 0.28.1",
+    "mcp >= 2.3.0, < 2.4.0",
+    "strands-agents >= 1.64.0, < 2.0.0",
+    "uvicorn >= 0.34.3, < 1.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
