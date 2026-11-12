@@ -1,0 +1,13 @@
+flowchart LR
+    B["Browser<br/>Next.js 16 + CopilotKit<br/>@a2ui/react"] -- "AG-UI" --> U["Next.js UI<br/>ECS Express Mode<br/>/api/agentcore signs SigV4"]
+    U -- "InvokeAgentRuntime<br/>AG-UI events" --> A["Strands agent<br/>AgentCore Runtime<br/>protocol AGUI"]
+    A -- "ConverseStream" --> N["Amazon Nova 2 Lite<br/>Bedrock"]
+    A -- "MCP over stdio" --> M["MCP server<br/>get_exchange_rate"]
+    A -- "RateCard<br/>RateHistoryChart<br/>RateComparison" --> F[("Frankfurter API<br/>ECB rates")]
+    M --> F
+    classDef ui fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    classDef agent fill:#fff7ed,stroke:#f97316,color:#7c2d12
+    classDef ext fill:#f8fafc,stroke:#64748b,color:#0f172a
+    class B,U ui
+    class A,N agent
+    class M,F ext
