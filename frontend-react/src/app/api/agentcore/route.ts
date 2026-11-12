@@ -64,11 +64,31 @@ export async function POST(req: Request): Promise<Response> {
   );
 
   const qualifier = encodeURIComponent(process.env.AGENTCORE_QUALIFIER || "DEFAULT");
-  const upstream = await fetch(`https://${host}${path}?qualifier=${qualifier}`, {
-    method: "POST",
-    headers: signed.headers as Record<string, string>,
-    body,
-  });
+  const target = `https://${host}${path}?qualifier=${qualifier}`;
+  // AgentCore Runtime answers some invocations with an immediate 500
+  // (RUN_ERROR INTERNAL_ERROR) before the agent runs. Retry those; nothing has
+  // been streamed to the client yet, and the signature is valid for 5 minutes.
+  let upstream: Response | undefined;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    upstream = await fetch(target, {
+      method: "POST",
+      headers: signed.headers as Record<string, string>,
+      body,
+    });
+    if (upstream.status < 500) break;
+    const detail = await upstream.text();
+    console.error(
+      `agentcore ${upstream.status} attempt ${attempt} request-id ${upstream.headers.get("x-amzn-requestid")}: ${detail.slice(0, 200)}`,
+    );
+    if (attempt === 4) {
+      return new Response(detail, {
+        status: upstream.status,
+        headers: { "content-type": upstream.headers.get("content-type") || "text/event-stream" },
+      });
+    }
+    await new Promise((r) => setTimeout(r, 400 * attempt));
+  }
+  if (!upstream) throw new Error("unreachable");
   return new Response(upstream.body, {
     status: upstream.status,
     headers: {
