@@ -49,7 +49,7 @@ Ten prompts, ten runs each, sent through the UI's CopilotKit endpoint by `tools/
 | Where | Model | Clean renders |
 |---|---|---|
 | Local agent and UI | `us.amazon.nova-2-lite-v1:0` | 100 of 100 (`evidence/render-suite-nova-2-lite.txt`) |
-| AWS: ECS Express Mode → AgentCore Runtime | `us.amazon.nova-2-lite-v1:0` | see `evidence/render-suite-aws.txt` |
+| AWS: ECS Express Mode → AgentCore Runtime | `us.amazon.nova-2-lite-v1:0` | 100 of 100 (`evidence/render-suite-aws.txt`) |
 
 ## Run locally
 

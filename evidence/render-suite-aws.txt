@@ -1,0 +1,11 @@
+# nova-2-lite-on-agentcore: 100 of 100 replies rendered clean (10 runs per prompt)
+10 of 10: pass | Compare 1 USD in EUR, GBP, JPY and CAD
+10 of 10: pass | Compare the euro, pound and Swiss franc against the dollar in a bar chart
+10 of 10: pass | Convert 100 USD to XYZ
+10 of 10: pass | How much is 250 USD in EUR?
+10 of 10: pass | Show a bar chart of 1 USD in EUR, GBP, JPY, CHF and CAD
+10 of 10: pass | Show me EUR to USD for the past 6 months and the current rate
+10 of 10: pass | Show me the USD to JPY trend over the last 90 days
+10 of 10: pass | What's a thousand euros in dollars?
+10 of 10: pass | What's the weather in Paris?
+10 of 10: pass | Write the A2UI block for a USD to EUR rate card directly in your reply text. Do not call any tool.
